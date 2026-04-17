@@ -1,102 +1,92 @@
-     let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
-
-    const inputEl = document.getElementById('todo-input');
+    <script>
+    // Simple variables
+    let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
+    
+    const input = document.getElementById('todo-input');
     const addBtn = document.getElementById('add-btn');
-    const listEl = document.getElementById('todo-list');
+    const list = document.getElementById('todo-list');
     const errorBox = document.getElementById('error-box');
 
-    
+    // Save to localStorage and re-render
     function saveAndRender() {
-       
         localStorage.setItem('my_unique_todos', JSON.stringify(todos));
         render();
     }
 
-    function addItem() {
-        const text = inputEl.value.trim();
-        
-        // Prevent empty items
+    // Add new todo
+    function addTodo() {
+        const text = input.value.trim();
         if (!text) return;
 
-        // Requirement: Prevent duplicates (Case-insensitive check)
-        const isDuplicate = todos.some(item => 
-            item.text.toLowerCase() === text.toLowerCase()
-        );
-
-        if (isDuplicate) {
+        // Check for duplicate
+        if (todos.some(todo => todo.text.toLowerCase() === text.toLowerCase())) {
             errorBox.style.display = 'block';
             return;
         }
 
         errorBox.style.display = 'none';
-        
-        const newTodo = {
-            id: Date.now(), // Unique ID
+
+        todos.push({
+            id: Date.now(),
             text: text,
             done: false
-        };
-
-        todos.push(newTodo);
-        inputEl.value = '';
-        saveAndRender();
-    }
-
-    function toggleDone(id) {
-        todos = todos.map(todo => {
-            if (todo.id === id) {
-                return { ...todo, done: !todo.done };
-            }
-            return todo;
         });
+
+        input.value = '';
         saveAndRender();
     }
 
-    function deleteItem(id) {
+    // Toggle done/undone
+    function toggleDone(id) {
+        todos = todos.map(todo => 
+            todo.id === id ? { ...todo, done: !todo.done } : todo
+        );
+        saveAndRender();
+    }
+
+    // Delete todo
+    function deleteTodo(id) {
         todos = todos.filter(todo => todo.id !== id);
         saveAndRender();
     }
 
-    
+    // Render the list
     function render() {
-        listEl.innerHTML = '';
+        list.innerHTML = '';
 
         todos.forEach(todo => {
             const li = document.createElement('li');
-            
+
             li.innerHTML = `
-                <span class="todo-text ${todo.done ? 'done' : ''}" 
-                      onclick="toggleDone(${todo.id})">
-                    ${escapeHTML(todo.text)}
+                <span class="todo-text ${todo.done ? 'done' : ''}">
+                    ${todo.text}
                 </span>
                 <div class="actions">
-                    <button class="btn-action complete-btn" onclick="toggleDone(${todo.id})">
-                        ${todo.done ? 'Undo' : 'Done'}
-                    </button>
-                    <button class="btn-action delete-btn" onclick="deleteItem(${todo.id})">
-                        Delete
-                    </button>
+                    <button class="complete-btn">${todo.done ? 'Undo' : 'Done'}</button>
+                    <button class="delete-btn">Delete</button>
                 </div>
             `;
-            listEl.appendChild(li);
+
+            // Event listeners
+            li.querySelector('.complete-btn').onclick = () => toggleDone(todo.id);
+            li.querySelector('.delete-btn').onclick = () => deleteTodo(todo.id);
+            li.querySelector('.todo-text').onclick = () => toggleDone(todo.id);
+
+            list.appendChild(li);
         });
     }
-    // Helper to prevent XSS (Always escape user input)
-    function escapeHTML(str) {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
 
+    // Event Listeners
+    addBtn.addEventListener('click', addTodo);
     
-    addBtn.addEventListener('click', addItem);
-
-    // Support "Enter" key
-    inputEl.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addItem();
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addTodo();
     });
 
-    // Hide error while typing
-    inputEl.addEventListener('input', () => {
+    input.addEventListener('input', () => {
         errorBox.style.display = 'none';
     });
+
+    // Initial render
     render();
+</script>

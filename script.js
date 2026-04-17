@@ -1,4 +1,4 @@
-    <script>
+    
     // Simple variables
     let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
     
@@ -89,4 +89,3 @@
 
     // Initial render
     render();
-</script>

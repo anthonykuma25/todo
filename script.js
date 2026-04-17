@@ -1,4 +1,3 @@
-// script.js - Anthony To-Do App
 
 let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
 

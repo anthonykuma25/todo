@@ -1,90 +1,79 @@
 
-let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
+   let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
 
-const input = document.getElementById('todo-input');
-const addBtn = document.getElementById('add-btn');
-const list = document.getElementById('todo-list');
-const errorBox = document.getElementById('error-box');
+    const input = document.getElementById('todo-input');
+    const addBtn = document.getElementById('add-btn');
+    const list = document.getElementById('todo-list');
+    const errorBox = document.getElementById('error-box');
 
-// Save to localStorage and render
-function saveAndRender() {
-    localStorage.setItem('my_unique_todos', JSON.stringify(todos));
-    render();
-}
-
-// Add new todo
-function addTodo() {
-    const text = input.value.trim();
-    if (!text) return;
-
-    // Check for duplicate (case insensitive)
-    if (todos.some(todo => todo.text.toLowerCase() === text.toLowerCase())) {
-        errorBox.style.display = 'block';
-        return;
+    function saveAndRender() {
+      localStorage.setItem('my_unique_todos', JSON.stringify(todos));
+      render();
     }
 
-    errorBox.style.display = 'none';
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) return;
 
-    todos.push({
+      // Check for duplicate
+      if (todos.some(todo => todo.text.toLowerCase() === text.toLowerCase())) {
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      errorBox.style.display = 'none';
+
+      todos.push({
         id: Date.now(),
         text: text,
         done: false
-    });
+      });
 
-    input.value = '';
-    saveAndRender();
-}
+      input.value = '';
+      saveAndRender();
+    }
 
-// Toggle complete / incomplete
-function toggleDone(id) {
-    todos = todos.map(todo => 
+    function toggleDone(id) {
+      todos = todos.map(todo =>
         todo.id === id ? { ...todo, done: !todo.done } : todo
-    );
-    saveAndRender();
-}
+      );
+      saveAndRender();
+    }
 
-// Delete todo
-function deleteTodo(id) {
-    todos = todos.filter(todo => todo.id !== id);
-    saveAndRender();
-}
+    function deleteTodo(id) {
+      todos = todos.filter(todo => todo.id !== id);
+      saveAndRender();
+    }
 
-// Render all todos
-function render() {
-    list.innerHTML = '';
+    function render() {
+      list.innerHTML = '';
 
-    todos.forEach(todo => {
+      todos.forEach(todo => {
         const li = document.createElement('li');
-
         li.innerHTML = `
-            <span class="todo-text ${todo.done ? 'done' : ''}">
-                ${todo.text}
-            </span>
-            <div class="actions">
-                <button class="complete-btn">${todo.done ? 'Undo' : 'Done'}</button>
-                <button class="delete-btn">Delete</button>
-            </div>
+          <span class="todo-text ${todo.done ? 'done' : ''}">
+            ${todo.text}
+          </span>
+          <button class="complete-btn">${todo.done ? 'Undo' : 'Done'}</button>
+          <button class="delete-btn">Delete</button>
         `;
 
-        // Event listeners
+        li.querySelector('.todo-text').onclick = () => toggleDone(todo.id);
         li.querySelector('.complete-btn').onclick = () => toggleDone(todo.id);
         li.querySelector('.delete-btn').onclick = () => deleteTodo(todo.id);
-        li.querySelector('.todo-text').onclick = () => toggleDone(todo.id);
 
         list.appendChild(li);
+      });
+    }
+
+    // Event Listeners
+    addBtn.addEventListener('click', addTodo);
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') addTodo();
     });
-}
 
-// Event Listeners
-addBtn.addEventListener('click', addTodo);
+    input.addEventListener('input', () => {
+      errorBox.style.display = 'none';
+    });
 
-input.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') addTodo();
-});
-
-input.addEventListener('input', () => {
-    errorBox.style.display = 'none';
-});
-
-// Initial render when page loads
-render();
+    render(); // Initial render

@@ -12,11 +12,7 @@
         localStorage.setItem('my_unique_todos', JSON.stringify(todos));
         render();
     }
-    function greeter (Name){
-    console.log('Hello ' + Name)
-}
-
-
+    
     // Add new todo
     function addTodo() {
         const text = input.value.trim();

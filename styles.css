@@ -11,4 +11,8 @@ body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif};
         
     }
 
+.delete-btn:hover {
+        background: #c0392b;
+    }
+
 

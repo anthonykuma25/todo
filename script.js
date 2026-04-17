@@ -12,10 +12,6 @@
         render();
     }
 
-function greeter (Name){
-    console.log('Hello' + Name)
-};
-
     function addItem() {
         const text = inputEl.value.trim();
         

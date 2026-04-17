@@ -1,26 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Anthony To-Do App</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Todo</title>
+ <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="todo-container">
-    <h1>Anthony To-Do List</h1>
-    
-    <div class="input-group">
-        <input type="text" id="todo-input" placeholder="Hello, you are welcome">
-        <button id="add-btn">Enter</button>
-    </div>
-    <div id="error-box" class="error-msg">This item already exists!</div>
+  <h1>My Todos</h1>
+  
+  <input type="text" id="todo-input" placeholder="Add a new todo...">
+  <button id="add-btn">Add</button>
+  
+  <div id="error-box">This todo already exists!</div>
 
-    <ul id="todo-list">
-    </ul>
-</div>
+  <ul id="todo-list"></ul>
 
-<script> src="script.js" </script>
+  <script>
+    let todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
 
+    const input = document.getElementById('todo-input');
+    const addBtn = document.getElementById('add-btn');
+    const list = document.getElementById('todo-list');
+    const errorBox = document.getElementById('error-box');
+
+    function saveAndRender() {
+      localStorage.setItem('my_unique_todos', JSON.stringify(todos));
+      render();
+    }
+
+    function addTodo() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      // Check for duplicate
+      if (todos.some(todo => todo.text.toLowerCase() === text.toLowerCase())) {
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      errorBox.style.display = 'none';
+
+      todos.push({
+        id: Date.now(),
+        text: text,
+        done: false
+      });
+
+      input.value = '';
+      saveAndRender();
+    }
+
+    function toggleDone(id) {
+      todos = todos.map(todo =>
+        todo.id === id ? { ...todo, done: !todo.done } : todo
+      );
+      saveAndRender();
+    }
+
+    function deleteTodo(id) {
+      todos = todos.filter(todo => todo.id !== id);
+      saveAndRender();
+    }
+
+    function render() {
+      list.innerHTML = '';
+
+      todos.forEach(todo => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <span class="todo-text ${todo.done ? 'done' : ''}">
+            ${todo.text}
+          </span>
+          <button class="complete-btn">${todo.done ? 'Undo' : 'Done'}</button>
+          <button class="delete-btn">Delete</button>
+        `;
+
+        li.querySelector('.todo-text').onclick = () => toggleDone(todo.id);
+        li.querySelector('.complete-btn').onclick = () => toggleDone(todo.id);
+        li.querySelector('.delete-btn').onclick = () => deleteTodo(todo.id);
+
+        list.appendChild(li);
+      });
+    }
+
+    // Event Listeners
+    addBtn.addEventListener('click', addTodo);
+    input.addEventListener('keypress', e => {
+      if (e.key === 'Enter') addTodo();
+    });
+
+    input.addEventListener('input', () => {
+      errorBox.style.display = 'none';
+    });
+
+    render(); // Initial render
+  </script>
 </body>
 </html>

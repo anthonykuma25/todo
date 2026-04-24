@@ -27,3 +27,9 @@ function remove(i) {
     todos.splice(i, 1);
     show();
 }
+
+document.getElementById("input").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        add();
+    }
+});

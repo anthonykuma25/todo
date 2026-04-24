@@ -1,5 +1,13 @@
 var todos = [];
 
+var inputBox = document.getElementById("input");  
+
+inputBox.addEventListener("keydown", function(event) {
+    if (event.key === "Enter") {
+        add();
+    }
+});
+
 function add() {
     var input = document.getElementById("input").value.trim();
 
@@ -8,9 +16,13 @@ function add() {
         return;
     }
 
-    if (todos.includes(input)) {
-        alert("This task already exists!");
-        return;
+    var lowerInput = input.toLowerCase();
+
+    for (var i = 0; i < todos.length; i++) {
+        if (todos[i].toLowerCase() === lowerInput) {
+            alert("This task already exists!");
+            return;
+        }
     }
 
     todos.push(input);
@@ -29,9 +41,7 @@ function show() {
                 <button onclick="remove(${i})">x</button>
             </li>
         `;
-    }
-}
-
+    }}
 function remove(i) {
     todos.splice(i, 1);
     show();

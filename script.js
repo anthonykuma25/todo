@@ -1,4 +1,4 @@
-<script>
+
 var todos = [];
 
 function add() {
@@ -30,4 +30,4 @@ function remove(i) {
 
 // connect button
 document.getElementById("add-btn").onclick = add;
-</script>
+

@@ -1,20 +1,21 @@
-
 var todos = [];
 
 function add() {
-    var input = document.getElementById("input").value;
+    var input = document.getElementById("input").value.trim();
 
-    if (input == "") {
-        alert("enter something");
-    } 
-    else if (todos.includes(input)) {
-        alert("already exists");
-    } 
-    else {
-        todos.push(input);
-        document.getElementById("input").value = "";
-        show();
+    if (input === "") {
+        alert("Enter something");
+        return;
     }
+
+    if (todos.includes(input)) {
+        alert("This task already exists!");
+        return;
+    }
+
+    todos.push(input);
+    document.getElementById("input").value = "";
+    show();
 }
 
 function show() {
@@ -22,8 +23,12 @@ function show() {
     list.innerHTML = "";
 
     for (var i = 0; i < todos.length; i++) {
-        list.innerHTML += "<li>" + todos[i] +
-        " <button onclick='remove(" + i + ")'>x</button></li>";
+        list.innerHTML += `
+            <li>
+                ${todos[i]}
+                <button onclick="remove(${i})">x</button>
+            </li>
+        `;
     }
 }
 
@@ -31,6 +36,3 @@ function remove(i) {
     todos.splice(i, 1);
     show();
 }
-
-
-});

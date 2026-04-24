@@ -2,23 +2,23 @@
 var todos = [];
 
 function add() {
-    var input = document.getElementById("todo-input").value;
+    var input = document.getElementById("input").value;
 
-    if(input == "") {
+    if (input == "") {
         alert("enter something");
     } else {
         todos.push(input);
-        document.getElementById("todo-input").value = "";
+        document.getElementById("input").value = "";
         show();
     }
 }
 
 function show() {
-    var list = document.getElementById("todo-list");
+    var list = document.getElementById("list");
     list.innerHTML = "";
 
-    for(var i = 0; i < todos.length; i++) {
-        list.innerHTML += "<li>" + todos[i] + 
+    for (var i = 0; i < todos.length; i++) {
+        list.innerHTML += "<li>" + todos[i] +
         " <button onclick='remove(" + i + ")'>x</button></li>";
     }
 }
@@ -27,7 +27,3 @@ function remove(i) {
     todos.splice(i, 1);
     show();
 }
-
-// connect button
-document.getElementById("add-btn").onclick = add;
-

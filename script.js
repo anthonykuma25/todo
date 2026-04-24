@@ -8,7 +8,6 @@ function addTodo() {
         alert("Enter something");
         return;
     }
-
     if (todos.includes(value)) {
         alert("Already exists");
         return;

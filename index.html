@@ -4,14 +4,17 @@
     <title>Anthony Todo App</title>
 </head>
 <body>
-
-    <h2>Anthony Todo</h2>
-
-    <input type="text" id="input" placeholder="Enter task">
-    <button onclick="addTodo()">Add</button>
-
-    <ul id="list"></ul>
-
+<div class = "container">
+    <div class = "todo-app">
+        <h2> Anthony To - Do list</h2>
+        <div class = "row">
+            <input type = "text" id = "input-box" placeholder = "Add your text">
+            <button onclick = "addTask()">Add</button>
+        </div>
+        <ul id="list-container">
+        </ul>
+    </div>
+</div>
     <script src="script.js"></script>
     <link rel="stylesheet" href="styles.css">
 </body>

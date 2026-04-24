@@ -1,66 +1,52 @@
-// get saved todos or empty array
 let todos = JSON.parse(localStorage.getItem("todos")) || [];
 
-let input = document.getElementById("input");
-let list = document.getElementById("list");
-
-// show todos when page loads
-showTodos();
-
 function addTodo() {
-  let value = input.value;
+    let input = document.getElementById("input");
+    let value = input.value.trim();
 
-  // prevent empty input
-  if (value === "") {
-    alert("Enter something");
-    return;
-  }
+    if (value === "") {
+        alert("Enter something");
+        return;
+    }
 
-  // prevent duplicates
-  if (todos.includes(value)) {
-    alert("Already exists");
-    return;
-  }
+    if (todos.includes(value)) {
+        alert("Already exists");
+        return;
+    }
 
-  todos.push(value);
-  saveTodos();
-  showTodos();
+    todos.push(value);
+    input.value = "";
 
-  input.value = "";
+    saveData();
+    showTodos();
 }
-
 function showTodos() {
-  list.innerHTML = "";
+    let list = document.getElementById("list");
+    list.innerHTML = "";
 
-  for (let i = 0; i < todos.length; i++) {
-
-    let li = document.createElement("li");
-    li.innerText = todos[i];
-
-    // mark as done
-    li.onclick = function () {
-      li.style.textDecoration = "line-through";
-    };
-
-    // delete button
-    let btn = document.createElement("button");
-    btn.innerText = "X";
-
-    btn.onclick = function () {
-      removeTodo(i);
-    };
-
-    li.appendChild(btn);
-    list.appendChild(li);
-  }
+    for (let i = 0; i < todos.length; i++) {
+        list.innerHTML += `
+            <li>
+                <span onclick="markDone(this)">${todos[i]}</span>
+                <button onclick="deleteTodo(${i})">X</button>
+            </li>
+        `;
+    }
 }
 
-function removeTodo(index) {
-  todos.splice(index, 1);
-  saveTodos();
-  showTodos();
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    saveData();
+    showTodos();
 }
-
-function saveTodos() {
-  localStorage.setItem("todos", JSON.stringify(todos));
+function markDone(element) {
+    element.style.textDecoration = "line-through";
 }
+function saveData() {
+    localStorage.setItem("todos", JSON.stringify(todos));
+}  showTodos();
+document.getElementById("input").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        addTodo();
+    }
+});

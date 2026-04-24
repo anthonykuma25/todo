@@ -9,6 +9,7 @@ function save() {
   localStorage.setItem('my_unique_todos', JSON.stringify(todos));
   render();
 }
+
 function addTodo() {
   var text = input.value.trim();
   if (!text) return;
@@ -19,11 +20,19 @@ function addTodo() {
       return;
     }
   }
+
   errorBox.style.display = 'none';
-  todos.push({ id: Date.now(), text: text, done: false });
+
+  todos.push({
+    id: Date.now(),
+    text: text,
+    done: false
+  });
+
   input.value = '';
   save();
 }
+
 function toggleDone(id) {
   for (var i = 0; i < todos.length; i++) {
     if (todos[i].id === id) {
@@ -33,6 +42,7 @@ function toggleDone(id) {
   }
   save();
 }
+
 function deleteTodo(id) {
   todos = todos.filter(function(todo) {
     return todo.id !== id;
@@ -41,18 +51,19 @@ function deleteTodo(id) {
 }
 function render() {
   list.innerHTML = '';
+
   for (var i = 0; i < todos.length; i++) {
     var t = todos[i];
-    var li = document.createElement('li');
 
-    li.innerHTML =
-      '<span class="todo-text ' + (t.done ? 'done' : '') + '">' + t.text + '</span>' +
+    list.innerHTML +=
+      '<li>' +
+      '<span class="' + (t.done ? 'done' : '') + '" onclick="toggleDone(' + t.id + ')">' + t.text + '</span>' +
       '<button onclick="toggleDone(' + t.id + ')">' + (t.done ? 'Undo' : 'Done') + '</button>' +
-      '<button onclick="deleteTodo(' + t.id + ')">Delete</button>';
-
-    list.appendChild(li);
+      '<button onclick="deleteTodo(' + t.id + ')">Delete</button>' +
+      '</li>';
   }
 }
+
 addBtn.onclick = addTodo;
 input.onkeypress = function(e) {
   if (e.key === 'Enter') addTodo();

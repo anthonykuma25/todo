@@ -1,51 +1,34 @@
-let todos = JSON.parse(localStorage.getItem("todos")) || [];
+const inputBox = document.getElementById("input-boxt");
+const listContainer = document.getElementById("list-container");
 
-function addTodo() {
-    let input = document.getElementById("input");
-    let value = input.value.trim();
-
-    if (value === "") {
-        alert("Enter something");
-        return;
+function addTask(){
+    if(inputBox.value === ''){
+        alert("You must write something");
     }
-    if (todos.includes(value)) {
-        alert("Already exists");
-        return;
+    else{
+        let li = document.createElement("li");
+        li.innerHTML = inputBox.value;
+        listContainer.appendChild(li);
+        let span = document.createElement("span");
+        span.innerHTML = "\u00d7";
+        li.appendChild(span);
     }
-
-    todos.push(value);
-    input.value = "";
-
-    saveData();
-    showTodos();
+    inputBox.value = "";
 }
-function showTodos() {
-    let list = document.getElementById("list");
-    list.innerHTML = "";
-
-    for (let i = 0; i < todos.length; i++) {
-        list.innerHTML += `
-            <li>
-                <span onclick="markDone(this)">${todos[i]}</span>
-                <button onclick="deleteTodo(${i})">X</button>
-            </li>
-        `;
+listContainer.addEventListener("click", function(e){
+    if (e.target tagName === "LI"){
+           e.target.classlist.toggle("checked");
+        saveData();
     }
-}
+    else if(e.target.tagName === "SPAN"){
+        e.target.parentElement.remove();
+        saveData();
+    }},false);
 
-function deleteTodo(index) {
-    todos.splice(index, 1);
-    saveData();
-    showTodos();
+function saveData(){
+    localStorage.setItem("data", listContainer.innerHTML);
 }
-function markDone(element) {
-    element.style.textDecoration = "line-through";
+function showTask(){
+    listContainer.innerHTML = localStorage.getItem("data");
 }
-function saveData() {
-    localStorage.setItem("todos", JSON.stringify(todos));
-}  showTodos();
-document.getElementById("input").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-        addTodo();
-    }
-});
+showTask();

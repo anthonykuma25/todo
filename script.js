@@ -1,32 +1,26 @@
 var todos = [];
 
-var inputBox = document.getElementById("input");  
-
-inputBox.addEventListener("keydown", function(event) {
-    if (event.key === "Enter") {
-        add();
-    }
-});
-
 function add() {
-    var input = document.getElementById("input").value.trim();
+    var input = document.getElementById("input");
+    var value = input.value.trim();
 
-    if (input === "") {
+    if (value === "") {
         alert("Enter something");
         return;
     }
 
-    var lowerInput = input.toLowerCase();
+    // prevent duplicate (case-insensitive)
+    var lowerValue = value.toLowerCase();
 
     for (var i = 0; i < todos.length; i++) {
-        if (todos[i].toLowerCase() === lowerInput) {
+        if (todos[i].toLowerCase() === lowerValue) {
             alert("This task already exists!");
             return;
         }
     }
 
-    todos.push(input);
-    document.getElementById("input").value = "";
+    todos.push(value);
+    input.value = "";
     show();
 }
 
@@ -41,8 +35,18 @@ function show() {
                 <button onclick="remove(${i})">x</button>
             </li>
         `;
-    }}
+    }
+}
 function remove(i) {
     todos.splice(i, 1);
     show();
 }
+window.onload = function () {
+    var inputBox = document.getElementById("input");
+
+    inputBox.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+            add();
+        }
+    });
+};

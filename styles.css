@@ -1,6 +1,6 @@
 body {font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif};
     .done { text-decoration: line-through; color: gray; }
-    #error-box { 
+    error-box { 
       color: red; 
       background: #ffe6e6; 
       padding: 20px; 

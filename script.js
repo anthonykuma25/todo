@@ -1,18 +1,20 @@
+<script>
 var todos = [];
 
 function add() {
-    var input = document.getElementById("input").value;
+    var input = document.getElementById("todo-input").value;
 
     if(input == "") {
         alert("enter something");
     } else {
         todos.push(input);
-        document.getElementById("input").value = "";
+        document.getElementById("todo-input").value = "";
         show();
     }
 }
+
 function show() {
-    var list = document.getElementById("list");
+    var list = document.getElementById("todo-list");
     list.innerHTML = "";
 
     for(var i = 0; i < todos.length; i++) {
@@ -25,3 +27,7 @@ function remove(i) {
     todos.splice(i, 1);
     show();
 }
+
+// connect button
+document.getElementById("add-btn").onclick = add;
+</script>

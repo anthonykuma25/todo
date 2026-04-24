@@ -11,7 +11,6 @@ function add() {
         show();
     }
 }
-
 function show() {
     var list = document.getElementById("list");
     list.innerHTML = "";

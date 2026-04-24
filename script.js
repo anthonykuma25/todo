@@ -1,72 +1,28 @@
-var todos = JSON.parse(localStorage.getItem('my_unique_todos')) || [];
+var todos = [];
 
-var input = document.getElementById('todo-input');
-var addBtn = document.getElementById('add-btn');
-var list = document.getElementById('todo-list');
-var errorBox = document.getElementById('error-box');
+function add() {
+    var input = document.getElementById("input").value;
 
-function save() {
-  localStorage.setItem('my_unique_todos', JSON.stringify(todos));
-  render();
-}
-
-function addTodo() {
-  var text = input.value.trim();
-  if (!text) return;
-
-  for (var i = 0; i < todos.length; i++) {
-    if (todos[i].text.toLowerCase() === text.toLowerCase()) {
-      errorBox.style.display = 'block';
-      return;
+    if(input == "") {
+        alert("enter something");
+    } else {
+        todos.push(input);
+        document.getElementById("input").value = "";
+        show();
     }
-  }
-
-  errorBox.style.display = 'none';
-
-  todos.push({
-    id: Date.now(),
-    text: text,
-    done: false
-  });
-
-  input.value = '';
-  save();
 }
 
-function toggleDone(id) {
-  for (var i = 0; i < todos.length; i++) {
-    if (todos[i].id === id) {
-      todos[i].done = !todos[i].done;
-      break;
-    }}
-  save();
-}
-function deleteTodo(id) {
-  todos = todos.filter(function(todo) {
-    return todo.id !== id;
-  });
-  save();
-}
-function render() {
-  list.innerHTML = '';
+function show() {
+    var list = document.getElementById("list");
+    list.innerHTML = "";
 
-  for (var i = 0; i < todos.length; i++) {
-    var t = todos[i];
-
-    list.innerHTML +=
-      '<li>' +
-      '<span class="' + (t.done ? 'done' : '') + '" onclick="toggleDone(' + t.id + ')">' + t.text + '</span>' +
-      '<button onclick="toggleDone(' + t.id + ')">' + (t.done ? 'Undo' : 'Done') + '</button>' +
-      '<button onclick="deleteTodo(' + t.id + ')">Delete</button>' +
-      '</li>';
-  }
+    for(var i = 0; i < todos.length; i++) {
+        list.innerHTML += "<li>" + todos[i] + 
+        " <button onclick='remove(" + i + ")'>x</button></li>";
+    }
 }
 
-addBtn.onclick = addTodo;
-input.onkeypress = function(e) {
-  if (e.key === 'Enter') addTodo();
-};
-input.oninput = function() {
-  errorBox.style.display = 'none';
-};
-render();
+function remove(i) {
+    todos.splice(i, 1);
+    show();
+}

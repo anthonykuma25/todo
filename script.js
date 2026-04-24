@@ -38,11 +38,9 @@ function toggleDone(id) {
     if (todos[i].id === id) {
       todos[i].done = !todos[i].done;
       break;
-    }
-  }
+    }}
   save();
 }
-
 function deleteTodo(id) {
   todos = todos.filter(function(todo) {
     return todo.id !== id;

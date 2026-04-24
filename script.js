@@ -6,7 +6,11 @@ function add() {
 
     if (input == "") {
         alert("enter something");
-    } else {
+    } 
+    else if (todos.includes(input)) {
+        alert("already exists");
+    } 
+    else {
         todos.push(input);
         document.getElementById("input").value = "";
         show();
@@ -28,8 +32,5 @@ function remove(i) {
     show();
 }
 
-document.getElementById("input").addEventListener("keypress", function(event) {
-    if (event.key === "Enter") {
-        add();
-    }
+
 });
